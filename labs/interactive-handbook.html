@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ tay Tương tác - Toàn cảnh Kế hoạch Tập huấn AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom Styles & Animations */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Gray-100 */
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 0.75rem;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-50px);
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        @keyframes slideDown {
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            background-color: #1e3a8a; /* Blue-900 */
+            color: white;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .close-btn {
+            color: #d1d5db;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: white;
+        }
+
+        /* Stepper Timeline Styles */
+        .stepper-wrapper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .stepper-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+
+        .step-item {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 33.33%;
+            cursor: pointer;
+        }
+
+        .step-counter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: white;
+            border: 4px solid #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.active .step-counter {
+            border-color: #2563eb; /* Blue-600 */
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .step-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4b5563;
+            text-align: center;
+        }
+        
+        .step-item.active .step-name {
+            color: #2563eb;
+        }
+
+        .step-details {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border-left: 4px solid #2563eb;
+        }
+
+        .step-details.active {
+            display: block;
+            animation: slideInLeft 0.4s ease-out;
+        }
+        
+        .step-detail-item {
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: slideInLeftItem 0.4s forwards;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInLeftItem {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Card Hover Effects */
+        .module-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #3b82f6; /* Blue-500 */
+        }
+
+        /* Highlight style */
+        .highlight {
+            background-color: #fef08a; /* Yellow-200 */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+
+        /* Chatbot Styles */
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background: white;
+            border: 1px solid #e5e7eb;
+            transition: transform 0.3s ease;
+        }
+        
+        #chatbot-container.minimized {
+            transform: translateY(calc(100% - 48px)); /* Height of header */
+        }
+
+        #chatbot-header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #chatbot-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background-color: #f9fafb;
+        }
+
+        .chat-msg {
+            max-width: 80%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .chat-bot {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        .chat-user {
+            background-color: #2563eb;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        #chatbot-input-area {
+            display: flex;
+            padding: 0.75rem;
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c0c0c0; 
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0a0a0; 
+        }
+
+        /* Outreach Labs theme */
+        :root {
+            --lab-ink: #14213d;
+            --lab-muted: #637083;
+            --lab-blue: #4f6df5;
+            --lab-violet: #8c5cf5;
+            --lab-cyan: #28c2d1;
+            --lab-orange: #ff8a3d;
+            --lab-soft: #f5f8ff;
+            --lab-shadow: 0 18px 60px rgba(34, 55, 110, .14);
+        }
+
+        body {
+            color: var(--lab-ink);
+            background: linear-gradient(180deg, #fbfdff 0%, var(--lab-soft) 100%);
+        }
+
+        .handbook-header {
+            background: linear-gradient(120deg, #172554, #302b63 55%, #6a4bd8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .handbook-header::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            right: -90px;
+            top: -170px;
+            background: rgba(255, 255, 255, .1);
+            pointer-events: none;
+        }
+
+        .handbook-brand {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .handbook-logo {
+            width: 150px;
+            height: 58px;
+            object-fit: contain;
+            padding: 7px 12px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: 0 12px 30px rgba(14, 24, 60, .18);
+        }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            color: #dfe5ff;
+            font-size: .875rem;
+            font-weight: 600;
+            transition: .2s ease;
+        }
+
+        .home-link:hover { color: white; transform: translateX(-3px); }
+        #nav-tabs .tab-btn.active { color: white !important; background: linear-gradient(90deg, var(--lab-blue), var(--lab-violet)) !important; border-color: transparent !important; }
+        #nav-tabs .tab-btn:not(.active):hover { color: var(--lab-blue) !important; background: #eef2ff !important; }
+        .module-card { border-radius: 1rem; box-shadow: 0 12px 34px rgba(35, 50, 90, .08); }
+        .module-card:hover { border-color: var(--lab-violet); box-shadow: var(--lab-shadow); }
+        .modal-header, #chatbot-header { background: linear-gradient(90deg, var(--lab-blue), var(--lab-violet)); }
+        .step-item.active .step-counter { border-color: var(--lab-blue); background: var(--lab-blue); }
+        .step-item.active .step-name { color: var(--lab-blue); }
+        .step-details { border-left-color: var(--lab-violet); background: #f7f8ff; }
+        .chat-user { background: linear-gradient(135deg, var(--lab-blue), var(--lab-violet)); }
+
+        @media (max-width: 640px) {
+            .handbook-brand { align-items: flex-start; gap: 14px; }
+            .handbook-logo { width: 105px; height: 48px; padding: 6px 8px; }
+            #chatbot-container { width: calc(100% - 28px); right: 14px; bottom: 14px; }
+        }
+        /* Shared Outreach Labs shell */
+        .site-nav{height:78px;background:rgba(255,255,255,.96);display:flex;align-items:center;position:relative;z-index:20;border-bottom:1px solid #e8edf7}
+        .site-nav-inner{width:min(1180px,calc(100% - 40px));margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
+        .site-brand{display:flex;align-items:center;gap:12px;color:var(--lab-ink);font-weight:900}
+        .site-brand img{width:150px;height:44px;object-fit:contain}
+        .site-links{display:flex;align-items:center;gap:25px;color:var(--lab-ink);font-weight:700;font-size:.9rem}
+        .site-links a{transition:.2s}.site-links a:hover,.site-links a.active{color:var(--lab-blue)}
+        .handbook-footer{background:#10182c;color:#dfe5f2;padding:42px 0 24px;flex-shrink:0}
+        .handbook-footer-inner{width:min(1180px,calc(100% - 40px));margin:auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:35px}
+        .handbook-footer img{width:170px;filter:brightness(1.2)}.handbook-footer a{display:block;margin:7px 0;color:#c6cede}.handbook-footer h4{color:white;font-weight:800}.handbook-footer-bottom{width:min(1180px,calc(100% - 40px));margin:28px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.12);color:#9aa7ba}
+        @media(max-width:800px){.site-links{gap:12px;font-size:.76rem}.site-links a:nth-child(3){display:none}.handbook-footer-inner{grid-template-columns:1fr}.handbook-header .max-w-7xl{padding-top:1.25rem;padding-bottom:1.25rem}}
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen">
+
+    <nav class="site-nav"><div class="site-nav-inner"><a class="site-brand" href="../index.html"><img src="../assets/images/steam-ai-logo.png" alt="STEAM AI"><span>Outreach Labs</span></a><div class="site-links"><a href="../index.html">Hệ thống Lab</a><a href="steam/index.html">STEAM Lab</a><a href="k12-interactive-learning.html">Giải pháp K12</a><a class="active" href="#">Sổ tay AI</a></div></div></nav>
+
+    <header class="handbook-header text-white shadow-md z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="handbook-brand">
+                <div><h1 class="text-2xl md:text-3xl font-bold tracking-tight">
+                <i class="fas fa-book-open mr-3"></i>Sổ tay Tương tác - Kế hoạch Tập huấn AI
+                </h1>
+                <p class="mt-2 text-blue-200 text-sm md:text-base">Hệ thống tra cứu nhanh, đầy đủ lộ trình và mô-đun tập huấn ứng dụng AI thực chiến.</p>
+                <a class="home-link" href="../index.html"><i class="fas fa-arrow-left"></i> Về hệ thống Outreach Labs</a></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-white shadow-sm border-b border-gray-200 z-10 sticky top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex space-x-1 overflow-x-auto py-2 scrollbar-hide" aria-label="Tabs" id="nav-tabs">
+                <button onclick="openTab(event, 'tab1')" class="tab-btn active bg-blue-50 text-blue-700 whitespace-nowrap px-4 py-3 font-medium text-sm rounded-md transition-colors border-b-2 border-blue-700">
+                    <i class="fas fa-bullseye mr-2"></i>Mục tiêu & Thông tin
+                </button>
+                <button onclick="openTab(event, 'tab2')" class="tab-btn text-gray-500 hover:text-gray-700 hover:bg-gray-50 whitespace-nowrap px-4 py-3 font-medium text-sm rounded-md transition-colors border-b-2 border-transparent">
+                    <i class="fas fa-th-large mr-2"></i>Khung Mô-đun
+                </button>
+                <button onclick="openTab(event, 'tab3')" class="tab-btn text-gray-500 hover:text-gray-700 hover:bg-gray-50 whitespace-nowrap px-4 py-3 font-medium text-sm rounded-md transition-colors border-b-2 border-transparent">
+                    <i class="fas fa-route mr-2"></i>Gợi ý Lộ trình
+                </button>
+                <button onclick="openTab(event, 'tab4')" class="tab-btn text-gray-500 hover:text-gray-700 hover:bg-gray-50 whitespace-nowrap px-4 py-3 font-medium text-sm rounded-md transition-colors border-b-2 border-transparent">
+                    <i class="fas fa-tasks mr-2"></i>Tiến trình & Hạ tầng
+                </button>
+                <button onclick="openTab(event, 'tab5')" class="tab-btn text-gray-500 hover:text-gray-700 hover:bg-gray-50 whitespace-nowrap px-4 py-3 font-medium text-sm rounded-md transition-colors border-b-2 border-transparent">
+                    <i class="fas fa-check-circle mr-2"></i>Kiến nghị
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+        
+        <div id="tab1" class="tab-content active">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">Mục tiêu & Thông tin Chung</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Info Cards -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col items-center text-center">
+                    <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Mục tiêu 1: Chuẩn hóa An toàn</h3>
+                    <p class="text-sm text-gray-600">100% học viên nắm vững quy định không tiết lộ dữ liệu nội bộ, thông tin cá nhân hay tài liệu bảo mật lên các hệ thống AI.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col items-center text-center">
+                    <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Mục tiêu 2: Nâng cao Năng suất</h3>
+                    <p class="text-sm text-gray-600">Giảm 50% – 70% thời gian xử lý các công việc thủ công trong thực tế hành chính và giảng dạy.</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col items-center text-center">
+                    <div class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-utensils text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Mục tiêu 3: Buffet Learning</h3>
+                    <p class="text-sm text-gray-600">Mô hình đào tạo linh hoạt. Cho phép người học tự chọn mô-đun phù hợp chính xác với vị trí việc làm.</p>
+                </div>
+            </div>
+
+            <!-- Text Blocks -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-4">
+                <h3 class="text-lg font-semibold text-gray-900 border-b pb-2 mb-4">Thông tin Tổ chức</h3>
+                
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-users text-blue-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-sm font-medium text-gray-900">Đối tượng tham gia:</h4>
+                        <p class="text-sm text-gray-600">Toàn thể Giảng viên, Giáo viên, Cán bộ quản lý và Nhân viên hành chính.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-chalkboard-teacher text-blue-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-sm font-medium text-gray-900">Hình thức tổ chức:</h4>
+                        <p class="text-sm text-gray-600">Tập huấn trực tiếp kết hợp thực hành tại chỗ (Mô hình 70% thực hành – 30% lý thuyết).</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-sitemap text-blue-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-sm font-medium text-gray-900">Phương thức đào tạo:</h4>
+                        <p class="text-sm text-gray-600">Học viên <span class="font-semibold text-red-600">bắt buộc</span> hoàn thành Mô-đun Cốt lõi, sau đó tự chọn 2 - 3 Mô-đun Chuyên đề theo nhu cầu công tác.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <div class="flex justify-between items-center mb-6 border-b pb-2">
+                <h2 class="text-2xl font-bold text-gray-900">Khung Mô-đun Tập huấn</h2>
+                <span class="text-sm text-gray-500 italic"><i class="fas fa-info-circle mr-1"></i>Click vào thẻ để xem chi tiết</span>
+            </div>
+
+            <!-- Card Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Card Core -->
+                <div class="module-card bg-white rounded-lg shadow border-l-4 border-red-500 p-5 flex flex-col h-full" onclick="openModal('modal-core')">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            Bắt buộc
+                        </span>
+                        <span class="text-xs font-semibold text-gray-500"><i class="far fa-clock mr-1"></i>45 phút</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">MÔ-ĐUN CỐT LÕI</h3>
+                    <p class="text-sm text-gray-600 flex-grow line-clamp-3">Tư duy đúng về GenAI, nhận diện 'Ảo giác AI'. Quản trị rủi ro & Kỹ thuật ra lệnh chuẩn C-T-R-F.</p>
+                    <div class="mt-4 text-blue-600 text-sm font-medium flex items-center">
+                        Xem chi tiết <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Card MĐ 01 -->
+                <div class="module-card bg-white rounded-lg shadow border-l-4 border-blue-500 p-5 flex flex-col h-full" onclick="openModal('modal-m01')">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            MĐ 01
+                        </span>
+                        <span class="text-xs font-semibold text-gray-500"><i class="far fa-clock mr-1"></i>90-120 phút</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">Soạn thảo & Chuẩn hóa Văn bản / Giáo án</h3>
+                    <p class="text-sm text-gray-600 flex-grow line-clamp-2">Kỹ thuật 'Ép khuôn' chuẩn thể thức. Quy trình 4 bước soạn Kế hoạch, Nghị quyết.</p>
+                    <div class="mt-4 text-blue-600 text-sm font-medium flex items-center">
+                        Xem chi tiết <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Card MĐ 02 -->
+                <div class="module-card bg-white rounded-lg shadow border-l-4 border-blue-500 p-5 flex flex-col h-full" onclick="openModal('modal-m02')">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            MĐ 02
+                        </span>
+                        <span class="text-xs font-semibold text-gray-500"><i class="far fa-clock mr-1"></i>90-120 phút</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">Tổng hợp Báo cáo & Trích xuất Nhiệm vụ</h3>
+                    <p class="text-sm text-gray-600 flex-grow line-clamp-2">Mô hình NotebookLM + Gemini. Nạp System Prompt tạo Trợ lý Báo cáo.</p>
+                    <div class="mt-4 text-blue-600 text-sm font-medium flex items-center">
+                        Xem chi tiết <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Card MĐ 03 -->
+                <div class="module-card bg-white rounded-lg shadow border-l-4 border-blue-500 p-5 flex flex-col h-full" onclick="openModal('modal-m03'); triggerLogic('m03')">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            MĐ 03
+                        </span>
+                        <span class="text-xs font-semibold text-gray-500"><i class="far fa-clock mr-1"></i>90-120 phút</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">Thống kê Số liệu & Tự động hóa Biểu mẫu</h3>
+                    <p class="text-sm text-gray-600 flex-grow line-clamp-2">Làm sạch Excel, trích xuất nhận định. Chạy mã GAS tự động tạo Forms.</p>
+                    <div class="mt-4 text-blue-600 text-sm font-medium flex items-center">
+                        Xem chi tiết <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Card MĐ 04 -->
+                <div class="module-card bg-white rounded-lg shadow border-l-4 border-blue-500 p-5 flex flex-col h-full" onclick="openModal('modal-m04')">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            MĐ 04
+                        </span>
+                        <span class="text-xs font-semibold text-gray-500"><i class="far fa-clock mr-1"></i>90-120 phút</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">Slide Thuyết trình, Media & Video ngắn</h3>
+                    <p class="text-sm text-gray-600 flex-grow line-clamp-2">Quy trình 2 giai đoạn (Outline -> Slide). Kịch bản video tuyên truyền 30s.</p>
+                    <div class="mt-4 text-blue-600 text-sm font-medium flex items-center">
+                        Xem chi tiết <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Card MĐ 05 -->
+                <div class="module-card bg-white rounded-lg shadow border-l-4 border-blue-500 p-5 flex flex-col h-full" onclick="openModal('modal-m05')">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            MĐ 05
+                        </span>
+                        <span class="text-xs font-semibold text-gray-500"><i class="far fa-clock mr-1"></i>90-120 phút</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">Đóng gói Trợ lý AI riêng (Custom Agent)</h3>
+                    <p class="text-sm text-gray-600 flex-grow line-clamp-2">Xây dựng System Prompt & nạp tệp tri thức. Thiết lập Custom GPTs/Gems.</p>
+                    <div class="mt-4 text-blue-600 text-sm font-medium flex items-center">
+                        Xem chi tiết <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab3" class="tab-content">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">Gợi ý Lộ trình Cá nhân hóa</h2>
+            
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="mb-6">
+                    <label for="role-select" class="block text-sm font-medium text-gray-700 mb-2">Chọn Nhóm Công Tác Của Bạn:</label>
+                    <select id="role-select" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" onchange="showRoute(this.value)">
+                        <option value="" disabled selected>-- Vui lòng chọn nhóm công tác --</option>
+                        <option value="nhom1">Nhóm 1 - Cán bộ Hành chính / Văn phòng / Tổ chức</option>
+                        <option value="nhom2">Nhóm 2 - Giảng viên / Giáo viên trực tiếp giảng dạy</option>
+                        <option value="nhom3">Nhóm 3 - Cán bộ Truyền thông / Truyền thanh / Đoàn - Hội</option>
+                        <option value="nhom4">Nhóm 4 - Ban Lãnh đạo / Trưởng bộ môn / Chuyên viên nòng cốt</option>
+                    </select>
+                </div>
+
+                <div id="route-display" class="hidden">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-map-marked-alt text-blue-600 mr-2"></i>Lộ trình Khuyến nghị
+                    </h3>
+                    
+                    <div class="relative pl-8 border-l-2 border-blue-200 space-y-6" id="route-steps">
+                        <!-- Dynamic content will be injected here -->
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded text-sm text-yellow-800">
+                        <i class="fas fa-lightbulb mr-2"></i><strong>Gợi ý từ AI Tutor:</strong> <span id="route-hint">Hãy chọn một nhóm để xem lộ trình.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab4" class="tab-content">
+            <div class="flex justify-between items-center mb-6 border-b pb-2">
+                <h2 class="text-2xl font-bold text-gray-900">Tiến trình Triển khai & Hạ tầng</h2>
+                <button onclick="openModal('modal-infrastructure')" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 font-semibold py-2 px-4 rounded text-sm transition-colors flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Điều kiện Hạ tầng
+                </button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mt-10">
+                <!-- Stepper -->
+                <div class="stepper-wrapper">
+                    <!-- Step 1 -->
+                    <div class="step-item" onclick="activateStep(1)">
+                        <div class="step-counter" id="step-counter-1">1</div>
+                        <div class="step-name">Giai đoạn 1<br><span class="font-normal text-xs">Chuẩn bị</span></div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="step-item" onclick="activateStep(2)">
+                        <div class="step-counter" id="step-counter-2">2</div>
+                        <div class="step-name">Giai đoạn 2<br><span class="font-normal text-xs">Tổ chức Tập huấn</span></div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="step-item" onclick="activateStep(3)">
+                        <div class="step-counter" id="step-counter-3">3</div>
+                        <div class="step-name">Giai đoạn 3<br><span class="font-normal text-xs">Đánh giá & Cấp CN</span></div>
+                    </div>
+                </div>
+
+                <!-- Step Details Container -->
+                <div class="mt-8 min-h-[150px]">
+                    <!-- Detail 1 -->
+                    <div id="step-detail-1" class="step-details">
+                        <h4 class="font-bold text-blue-800 mb-3 border-b border-blue-200 pb-2">Công việc Giai đoạn 1 (Chuẩn bị)</h4>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li class="step-detail-item" style="animation-delay: 0.1s;"><i class="fas fa-check text-green-500 mr-2"></i>Khảo sát nhu cầu đăng ký học viện.</li>
+                            <li class="step-detail-item" style="animation-delay: 0.2s;"><i class="fas fa-check text-green-500 mr-2"></i>Gửi video hướng dẫn chuẩn bị tài khoản AI.</li>
+                            <li class="step-detail-item" style="animation-delay: 0.3s;"><i class="fas fa-check text-green-500 mr-2"></i>Bố trí tài liệu mẫu cho từng mô-đun.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Detail 2 -->
+                    <div id="step-detail-2" class="step-details">
+                        <h4 class="font-bold text-blue-800 mb-3 border-b border-blue-200 pb-2">Công việc Giai đoạn 2 (Tổ chức tập huấn)</h4>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li class="step-detail-item" style="animation-delay: 0.1s;"><i class="fas fa-chalkboard-teacher text-blue-500 mr-2"></i>Chia ca học theo từng Mô-đun đã đăng ký.</li>
+                            <li class="step-detail-item" style="animation-delay: 0.2s;"><i class="fas fa-users-cog text-blue-500 mr-2"></i>Đảm bảo nhân sự hỗ trợ kỹ thuật (Trợ giảng/TA).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Detail 3 -->
+                    <div id="step-detail-3" class="step-details">
+                        <h4 class="font-bold text-blue-800 mb-3 border-b border-blue-200 pb-2">Công việc Giai đoạn 3 (Đánh giá)</h4>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li class="step-detail-item" style="animation-delay: 0.1s;"><i class="fas fa-file-upload text-purple-500 mr-2"></i>Học viên nộp sản phẩm thực hành về Ban tổ chức.</li>
+                            <li class="step-detail-item" style="animation-delay: 0.2s;"><i class="fas fa-certificate text-purple-500 mr-2"></i>BTC kiểm tra và cấp nhận chứng nhận hoàn thành.</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Helper Text -->
+                    <div id="step-helper" class="text-center text-gray-500 text-sm mt-8 italic">
+                        Click vào từng giai đoạn trên trục thời gian để xem chi tiết công việc.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab5" class="tab-content">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">Kiến nghị Phê duyệt</h2>
+            
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 max-w-3xl">
+                <p class="mb-4 text-gray-700">Kính trình Ban Lãnh đạo xem xét và phê duyệt các nội dung sau để triển khai Kế hoạch:</p>
+                
+                <div class="space-y-4 mb-8">
+                    <label class="flex items-start cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
+                        <div class="flex-shrink-0 mt-0.5">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 approval-checkbox">
+                        </div>
+                        <span class="ml-3 text-sm text-gray-700">
+                            <strong class="text-gray-900">1.</strong> Phê duyệt chủ trương tổ chức chương trình tập huấn theo khung kế hoạch trên.
+                        </span>
+                    </label>
+                    
+                    <label class="flex items-start cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
+                        <div class="flex-shrink-0 mt-0.5">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 approval-checkbox">
+                        </div>
+                        <span class="ml-3 text-sm text-gray-700">
+                            <strong class="text-gray-900">2.</strong> Cho phép gửi biểu mẫu khảo sát đăng ký Mô-đun học tập đến toàn thể cán bộ, giảng viên, nhân viên.
+                        </span>
+                    </label>
+
+                    <label class="flex items-start cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
+                        <div class="flex-shrink-0 mt-0.5">
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 approval-checkbox">
+                        </div>
+                        <span class="ml-3 text-sm text-gray-700">
+                            <strong class="text-gray-900">3.</strong> Hỗ trợ kinh phí và cơ sở vật chất (phòng họp, hệ thống mạng, công tác tổ chức) theo dự toán kèm theo.
+                        </span>
+                    </label>
+                </div>
+
+                <div class="flex justify-end border-t pt-4">
+                    <button id="btn-approve" onclick="handleApprove()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow opacity-50 cursor-not-allowed transition-all" disabled>
+                        <i class="fas fa-signature mr-2"></i>Phê duyệt Kế hoạch
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Core -->
+    <div id="modal-core" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="font-bold text-lg"><span class="bg-red-500 text-white px-2 py-1 rounded text-sm mr-2">BẮT BUỘC</span>MÔ-ĐUN CỐT LÕI</h3>
+                <span class="close-btn" onclick="closeModal('modal-core')">&times;</span>
+            </div>
+            <div class="modal-body space-y-4">
+                <div class="flex items-center text-gray-700 bg-gray-50 p-2 rounded">
+                    <i class="far fa-clock w-6 text-center text-blue-500"></i>
+                    <span class="font-semibold w-24">Thời lượng:</span>
+                    <span>45 phút</span>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 border-b pb-1 mb-2"><i class="fas fa-list-ul mr-2 text-blue-500"></i>Nội dung chính</h4>
+                    <p class="text-sm text-gray-700 leading-relaxed pl-6">
+                        Tư duy đúng về GenAI và nhận diện hiện tượng 'Ảo giác AI' (Hallucination). Quản trị rủi ro & Bộ nguyên tắc '3 Không - 1 Có' bảo mật dữ liệu công vụ/nhà trường. Kỹ thuật ra lệnh chuẩn C-T-R-F (Context - Task - Role - Format).
+                    </p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                    <h4 class="font-semibold text-green-800 mb-1"><i class="fas fa-box-open mr-2"></i>Sản phẩm đầu ra</h4>
+                    <p class="text-sm text-green-700 pl-6">100% học viên thực hành ẩn danh thông tin và viết đúng 01 Prompt chuẩn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal M01 -->
+    <div id="modal-m01" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="font-bold text-lg">MĐ 01: Soạn thảo & Chuẩn hóa Văn bản / Giáo án</h3>
+                <span class="close-btn" onclick="closeModal('modal-m01')">&times;</span>
+            </div>
+            <div class="modal-body space-y-4">
+                <div class="flex items-center text-gray-700 bg-gray-50 p-2 rounded">
+                    <i class="far fa-clock w-6 text-center text-blue-500"></i>
+                    <span class="font-semibold w-24">Thời lượng:</span>
+                    <span>90 – 120 phút</span>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 border-b pb-1 mb-2"><i class="fas fa-tools mr-2 text-blue-500"></i>Kỹ năng & Công cụ chính</h4>
+                    <p class="text-sm text-gray-700 leading-relaxed pl-6">
+                        Kỹ thuật 'Ép khuôn' (Prompt Constraint) chuẩn thể thức. Quy trình 4 bước soạn Kế hoạch, Nghị quyết, Thông báo.
+                    </p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                    <h4 class="font-semibold text-green-800 mb-1"><i class="fas fa-box-open mr-2"></i>Sản phẩm đầu ra đạt được</h4>
+                    <p class="text-sm text-green-700 pl-6">01 Dự thảo Kế hoạch/Giáo án hoàn chỉnh đúng thể thức.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal M02 -->
+    <div id="modal-m02" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="font-bold text-lg">MĐ 02: Tổng hợp Báo cáo & Trích xuất Nhiệm vụ</h3>
+                <span class="close-btn" onclick="closeModal('modal-m02')">&times;</span>
+            </div>
+            <div class="modal-body space-y-4">
+                <div class="flex items-center text-gray-700 bg-gray-50 p-2 rounded">
+                    <i class="far fa-clock w-6 text-center text-blue-500"></i>
+                    <span class="font-semibold w-24">Thời lượng:</span>
+                    <span>90 – 120 phút</span>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 border-b pb-1 mb-2"><i class="fas fa-tools mr-2 text-blue-500"></i>Kỹ năng & Công cụ chính</h4>
+                    <p class="text-sm text-gray-700 leading-relaxed pl-6">
+                        Mô hình kết nối NotebookLM + Gemini xử lý file dài. Nạp System Prompt tạo Trợ lý Báo cáo Tuần/Tháng.
+                    </p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                    <h4 class="font-semibold text-green-800 mb-1"><i class="fas fa-box-open mr-2"></i>Sản phẩm đầu ra đạt được</h4>
+                    <p class="text-sm text-green-700 pl-6">01 Báo cáo tổng hợp đa nguồn & Bảng theo dõi tiến độ.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal M03 (With Logic) -->
+    <div id="modal-m03" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="font-bold text-lg">MĐ 03: Thống kê Số liệu & Tự động hóa Biểu mẫu</h3>
+                <span class="close-btn" onclick="closeModal('modal-m03')">&times;</span>
+            </div>
+            <div class="modal-body space-y-4 relative">
+                <!-- Logic Alert Overlay -->
+                <div id="logic-alert-m03" class="hidden bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4 shadow-sm animate-pulse" role="alert">
+                    <div class="flex">
+                        <div class="py-1"><i class="fas fa-robot text-2xl mr-4"></i></div>
+                        <div>
+                            <p class="font-bold text-sm">AI Tutor nhắn nhủ:</p>
+                            <p class="text-sm">"Mô-đun này cực kỳ hữu ích nếu bạn thường xuyên phải làm báo cáo số liệu. Sản phẩm cuối cùng bạn cầm về là 01 Google Form tạo tự động và đoạn nhận định số liệu nhé!"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center text-gray-700 bg-gray-50 p-2 rounded">
+                    <i class="far fa-clock w-6 text-center text-blue-500"></i>
+                    <span class="font-semibold w-24">Thời lượng:</span>
+                    <span>90 – 120 phút</span>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 border-b pb-1 mb-2"><i class="fas fa-tools mr-2 text-blue-500"></i>Kỹ năng & Công cụ chính</h4>
+                    <p id="content-tool-m03" class="text-sm text-gray-700 leading-relaxed pl-6 transition-all duration-500">
+                        Làm sạch Excel, trích xuất nhận định bằng Bảng Markdown. Chạy mã Google Apps Script tự động tạo Google Forms.
+                    </p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                    <h4 class="font-semibold text-green-800 mb-1"><i class="fas fa-box-open mr-2"></i>Sản phẩm đầu ra đạt được</h4>
+                    <p id="content-output-m03" class="text-sm text-green-700 pl-6 transition-all duration-500">01 Google Form tạo tự động & Đoạn nhận định số liệu.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal M04 -->
+    <div id="modal-m04" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="font-bold text-lg">MĐ 04: Slide Thuyết trình, Media & Video ngắn</h3>
+                <span class="close-btn" onclick="closeModal('modal-m04')">&times;</span>
+            </div>
+            <div class="modal-body space-y-4">
+                <div class="flex items-center text-gray-700 bg-gray-50 p-2 rounded">
+                    <i class="far fa-clock w-6 text-center text-blue-500"></i>
+                    <span class="font-semibold w-24">Thời lượng:</span>
+                    <span>90 – 120 phút</span>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 border-b pb-1 mb-2"><i class="fas fa-tools mr-2 text-blue-500"></i>Kỹ năng & Công cụ chính</h4>
+                    <p class="text-sm text-gray-700 leading-relaxed pl-6">
+                        Quy trình 2 giai đoạn (Outline -> Slide) tạo bài giảng/báo cáo. Kịch bản video tuyên truyền 30s (Hook - Content - CTA).
+                    </p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                    <h4 class="font-semibold text-green-800 mb-1"><i class="fas fa-box-open mr-2"></i>Sản phẩm đầu ra đạt được</h4>
+                    <p class="text-sm text-green-700 pl-6">01 Bộ Slide hội nghị/bài giảng & 01 Kịch bản Video tuyên truyền.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal M05 -->
+    <div id="modal-m05" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="font-bold text-lg">MĐ 05: Đóng gói Trợ lý AI riêng (Custom AI Agent)</h3>
+                <span class="close-btn" onclick="closeModal('modal-m05')">&times;</span>
+            </div>
+            <div class="modal-body space-y-4">
+                <div class="flex items-center text-gray-700 bg-gray-50 p-2 rounded">
+                    <i class="far fa-clock w-6 text-center text-blue-500"></i>
+                    <span class="font-semibold w-24">Thời lượng:</span>
+                    <span>90 – 120 phút</span>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 border-b pb-1 mb-2"><i class="fas fa-tools mr-2 text-blue-500"></i>Kỹ năng & Công cụ chính</h4>
+                    <p class="text-sm text-gray-700 leading-relaxed pl-6">
+                        Xây dựng System Prompt & nạp tệp tri thức (Knowledge Base). Thiết lập Custom GPTs / Gemini Gems.
+                    </p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                    <h4 class="font-semibold text-green-800 mb-1"><i class="fas fa-box-open mr-2"></i>Sản phẩm đầu ra đạt được</h4>
+                    <p class="text-sm text-green-700 pl-6">01 Trợ lý AI riêng phục vụ phòng ban/bộ môn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Infrastructure Warning -->
+    <div id="modal-infrastructure" class="modal">
+        <div class="modal-content border-t-4 border-red-500">
+            <div class="modal-header bg-white text-gray-900 border-b-0 pb-0">
+                <h3 class="font-bold text-lg text-red-600 flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Điều kiện Hạ tầng & Nguồn lực
+                </h3>
+                <span class="close-btn text-gray-400 hover:text-gray-800" onclick="closeModal('modal-infrastructure')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="bg-red-50 rounded-lg p-4 text-sm text-red-800 border border-red-100">
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Mạng & Điện:</strong> Yêu cầu Phòng máy/Hội trường có kết nối Wifi công suất cao, ổ cắm điện đầy đủ cho laptop cá nhân.</li>
+                        <li><strong>Nhân sự:</strong> Đội ngũ Trợ giảng (TA): Bố trí tối thiểu <span class="font-bold underline">01 TA hỗ trợ cho mỗi 15 học viên</span> để đảm bảo xử lý sự cố kỹ thuật kịp thời trong quá trình thực hành.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="handbook-footer"><div class="handbook-footer-inner"><div><img src="../assets/images/steam-ai-logo.png" alt="STEAM AI"><p>Sổ tay tập huấn AI thuộc hệ sinh thái Outreach Labs.</p></div><div><h4>Nội dung</h4><a href="#nav-tabs">Mục tiêu & Thông tin</a><a href="#nav-tabs">Khung Mô-đun</a><a href="#nav-tabs">Lộ trình</a></div><div><h4>Hệ sinh thái</h4><a href="../index.html">Trang tổng Outreach Labs</a><a href="steam/index.html">STEAM Lab</a><a href="k12-interactive-learning.html">Giải pháp K12</a></div></div><div class="handbook-footer-bottom">© 2026 Outreach Labs.</div></footer>
+
+    <div id="chatbot-container" class="minimized">
+        <div id="chatbot-header" onclick="toggleChatbot()">
+            <div class="flex items-center font-semibold">
+                <i class="fas fa-robot mr-2 text-xl"></i> AI Tutor Assistant
+            </div>
+            <i class="fas fa-chevron-up" id="chatbot-icon"></i>
+        </div>
+        <div id="chatbot-messages">
+            <div class="chat-msg chat-bot">
+                Xin chào! Tôi là Trợ giảng Ảo. Bạn có cần hỗ trợ gì về kế hoạch tập huấn hoặc muốn tính toán thời gian học không? (Ví dụ: "MĐ 04 cung cấp gì cho Giảng viên?")
+            </div>
+        </div>
+        <div id="chatbot-input-area">
+            <input type="text" id="chat-input" class="flex-1 border border-gray-300 rounded-l-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Nhập câu hỏi...">
+            <button onclick="sendChatMessage()" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Hide all tab content
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            // Remove active class from all buttons and reset their styling
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                // Remove active class
+                tablinks[i].classList.remove("active");
+                // Remove active styling classes
+                tablinks[i].classList.remove("bg-blue-50", "text-blue-700", "border-blue-700");
+                // Add default inactive styling classes back
+                tablinks[i].classList.add("text-gray-500", "hover:text-gray-700", "hover:bg-gray-50", "border-transparent");
+            }
+
+            // Show current tab
+            var currentTab = document.getElementById(tabName);
+            currentTab.style.display = "block";
+            // trigger reflow for animation
+            void currentTab.offsetWidth; 
+            currentTab.classList.add("active");
+            
+            // Add active styling to the clicked button
+            evt.currentTarget.classList.remove("text-gray-500", "hover:text-gray-700", "hover:bg-gray-50", "border-transparent");
+            evt.currentTarget.classList.add("active", "bg-blue-50", "text-blue-700", "border-blue-700");
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+            // Reset logic highlights if closing M03
+            if(modalId === 'modal-m03') {
+                resetLogicM03();
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+                if(event.target.id === 'modal-m03') resetLogicM03();
+            }
+        }
+
+        // Logic 1: Tab 2 - Click MĐ 03
+        function triggerLogic(module) {
+            if(module === 'm03') {
+                // Wait for modal to render
+                setTimeout(() => {
+                    const alertBox = document.getElementById('logic-alert-m03');
+                    const toolContent = document.getElementById('content-tool-m03');
+                    const outputContent = document.getElementById('content-output-m03');
+
+                    alertBox.classList.remove('hidden');
+                    toolContent.classList.add('highlight');
+                    outputContent.classList.add('highlight');
+                }, 300);
+            }
+        }
+
+        function resetLogicM03() {
+            document.getElementById('logic-alert-m03').classList.add('hidden');
+            document.getElementById('content-tool-m03').classList.remove('highlight');
+            document.getElementById('content-output-m03').classList.remove('highlight');
+        }
+
+        // Logic 2: Tab 4 - Stepper Timeline
+        function activateStep(stepNumber) {
+            // Logic Feedback for Step 1
+            if (stepNumber === 1) {
+                showToast("Giai đoạn chuẩn bị là bước đệm quan trọng nhất để học viên làm quen với tài khoản AI trước khi vào thực hành tại hội trường.");
+            }
+
+            // Reset all
+            document.querySelectorAll('.step-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.step-details').forEach(el => el.classList.remove('active'));
+            document.getElementById('step-helper').style.display = 'none';
+
+            // Activate target
+            const targetItem = document.querySelectorAll('.step-item')[stepNumber - 1];
+            targetItem.classList.add('active');
+            
+            const targetDetail = document.getElementById(`step-detail-${stepNumber}`);
+            targetDetail.classList.add('active');
+            
+            // Re-trigger animation for items
+            const items = targetDetail.querySelectorAll('.step-detail-item');
+            items.forEach(item => {
+                item.style.animation = 'none';
+                item.offsetHeight; /* trigger reflow */
+                item.style.animation = null; 
+            });
+        }
+
+        const routeData = {
+            nhom1: {
+                modules: ['Cốt lõi', 'MĐ 01', 'MĐ 02', 'MĐ 03'],
+                hint: "Lộ trình này tập trung mạnh vào xử lý văn bản, báo cáo và số liệu hành chính."
+            },
+            nhom2: {
+                modules: ['Cốt lõi', 'MĐ 01', 'MĐ 04', 'MĐ 05'],
+                hint: "Lộ trình tối ưu cho giáo án, slide bài giảng và tạo trợ lý ảo chuyên môn."
+            },
+            nhom3: {
+                modules: ['Cốt lõi', 'MĐ 01', 'MĐ 04'],
+                hint: "Tập trung vào sáng tạo nội dung truyền thông, kịch bản và media."
+            },
+            nhom4: {
+                modules: ['Cốt lõi', 'MĐ 02', 'MĐ 05'],
+                hint: "Tập trung vào quản trị, tổng hợp báo cáo đa nguồn và đóng gói trợ lý chuyên trách."
+            }
+        };
+
+        const moduleIcons = {
+            'Cốt lõi': 'fa-star text-red-500',
+            'MĐ 01': 'fa-file-word text-blue-500',
+            'MĐ 02': 'fa-chart-pie text-blue-500',
+            'MĐ 03': 'fa-table text-blue-500',
+            'MĐ 04': 'fa-photo-video text-blue-500',
+            'MĐ 05': 'fa-robot text-blue-500'
+        };
+
+        function showRoute(groupId) {
+            const displayArea = document.getElementById('route-display');
+            const stepsContainer = document.getElementById('route-steps');
+            const hintArea = document.getElementById('route-hint');
+            
+            stepsContainer.innerHTML = ''; // Clear old
+            
+            if (routeData[groupId]) {
+                const data = routeData[groupId];
+                hintArea.textContent = data.hint;
+                
+                data.modules.forEach((mod, index) => {
+                    const stepDiv = document.createElement('div');
+                    stepDiv.className = 'relative';
+                    
+                    const iconClass = moduleIcons[mod] || 'fa-check-circle text-gray-500';
+                    const isCore = mod === 'Cốt lõi';
+                    
+                    stepDiv.innerHTML = `
+                        <div class="absolute -left-[41px] bg-white p-1 rounded-full border-2 ${isCore ? 'border-red-200' : 'border-blue-200'}">
+                            <i class="fas ${iconClass} w-4 h-4 text-center"></i>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded border border-gray-200 shadow-sm ml-2">
+                            <span class="font-bold ${isCore ? 'text-red-700' : 'text-blue-800'}">${mod}</span>
+                            <span class="text-sm text-gray-500 ml-2">(${isCore ? '45p' : '90-120p'})</span>
+                        </div>
+                    `;
+                    stepsContainer.appendChild(stepDiv);
+                });
+                
+                displayArea.classList.remove('hidden');
+                displayArea.classList.add('animate-fadeIn');
+            }
+        }
+
+        const checkboxes = document.querySelectorAll('.approval-checkbox');
+        const approveBtn = document.getElementById('btn-approve');
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const allChecked = Array.from(checkboxes).every(c => c.checked);
+                if (allChecked) {
+                    approveBtn.disabled = false;
+                    approveBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    approveBtn.disabled = true;
+                    approveBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            });
+        });
+
+        function handleApprove() {
+            showToast("Tờ trình Kế hoạch đã được phê duyệt thành công!");
+            // Reset for demo
+            checkboxes.forEach(c => c.checked = false);
+            approveBtn.disabled = true;
+            approveBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        function showToast(message) {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-gray-800 text-white px-6 py-3 rounded shadow-lg z-50 transform transition-transform duration-300 translate-y-[-100%] opacity-0';
+            toast.innerHTML = `<i class="fas fa-info-circle mr-2 text-blue-400"></i> ${message}`;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-100%]', 'opacity-0');
+            }, 10);
+
+            // Animate out and remove
+            setTimeout(() => {
+                toast.classList.add('translate-y-[-100%]', 'opacity-0');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 4000);
+        }
+
+        function toggleChatbot() {
+            const container = document.getElementById('chatbot-container');
+            const icon = document.getElementById('chatbot-icon');
+            
+            if (container.classList.contains('minimized')) {
+                container.classList.remove('minimized');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+                document.getElementById('chat-input').focus();
+            } else {
+                container.classList.add('minimized');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+
+        function addMessage(text, isUser = false) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-msg ${isUser ? 'chat-user' : 'chat-bot'}`;
+            msgDiv.innerHTML = text;
+            messagesContainer.appendChild(msgDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            const inputField = document.getElementById('chat-input');
+            const text = inputField.value.trim();
+            
+            if (text === '') return;
+            
+            // Add user message
+            addMessage(text, true);
+            inputField.value = '';
+            
+            // Simulate AI response based on hidden prompt rules
+            setTimeout(() => {
+                const lowerText = text.toLowerCase();
+                let response = "Xin lỗi, tôi chưa hiểu rõ câu hỏi. Bạn có thể hỏi về các Mô-đun (ví dụ: MĐ 04, MĐ 05) hoặc cách tính thời gian lộ trình.";
+                
+                // Rule: MĐ 04 cho Giảng viên
+                if ((lowerText.includes('mđ 04') || lowerText.includes('md 04') || lowerText.includes('mô đun 4')) && (lowerText.includes('công cụ') || lowerText.includes('kỹ năng') || lowerText.includes('giảng viên'))) {
+                    response = "Chào thầy/cô! Để xem MĐ 04 cung cấp công cụ gì, thầy/cô vui lòng chuyển sang <strong>Tab Khung Mô-đun (Tab 2)</strong> và click mở thẻ <strong>MĐ 04</strong> nhé. <br><br>Gợi ý: Tại đó, thầy/cô hãy đọc kỹ phần <em>'Quy trình 2 giai đoạn (Outline -> Slide)'</em>. Nó sẽ giúp tạo bộ slide bài giảng cực kỳ nhanh chóng đấy ạ!";
+                } 
+                // Rule: Tính toán thời gian
+                else if (lowerText.includes('thời gian') || lowerText.includes('tổng thời gian') || lowerText.includes('tính')) {
+                    response = "Cách tính thời gian chuẩn: <br>- Mô-đun Cốt lõi (bắt buộc): <strong>45 phút</strong>.<br>- Mỗi Mô-đun chuyên đề (tự chọn): <strong>90 - 120 phút</strong>.<br><br>Ví dụ: Nhóm Giảng viên (Cốt lõi + MĐ 01 + MĐ 04 + MĐ 05) sẽ mất khoảng: 45 + (3 * 90) = 315 phút (tối thiểu). Bạn thử tính lộ trình của mình xem nhé!";
+                }
+
+                addMessage(response, false);
+                
+                // Auto-open chatbot if closed
+                const container = document.getElementById('chatbot-container');
+                if (container.classList.contains('minimized')) {
+                    toggleChatbot();
+                }
+
+            }, 600);
+        }
+
+        // Handle Enter key in chat
+        document.getElementById('chat-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+
+    </script>
+</body>
+</html>
