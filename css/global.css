@@ -40,3 +40,89 @@
 .demo-result.wrong{display:block;background:#fff0f1;color:#9c2f3a;border:1px solid #f0c4c8}
 .demo-retry{display:none;margin-top:12px;border:0;border-radius:12px;padding:10px 15px;background:#172554;color:white;font-weight:850;cursor:pointer}
 .demo-retry.show{display:inline-flex}
+
+/* STEAM Lab course catalog */
+#courses{scroll-margin-top:78px}
+.courses-section{background:linear-gradient(180deg,#f4f7ff,#fbfdff)}
+.course-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:34px}
+.course-card{position:relative;display:flex;flex-direction:column;gap:12px;overflow:hidden;background:#fff;border:1px solid #e4eaf6;border-radius:24px;box-shadow:0 12px 35px rgba(35,50,90,.07);transition:transform .25s,box-shadow .25s}
+.course-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.course-card>:not(.course-visual){margin-left:23px;margin-right:23px}
+.course-visual{height:170px;position:relative;overflow:hidden;display:grid;place-items:center;isolation:isolate;color:#fff}
+.course-visual:before{content:"";position:absolute;width:200px;height:200px;border-radius:50%;right:-35px;top:-100px;background:rgba(255,255,255,.16);z-index:-1}
+.course-visual:after{content:"";position:absolute;width:125px;height:125px;border:2px solid rgba(255,255,255,.18);border-radius:26px;transform:rotate(25deg);left:-25px;bottom:-80px;z-index:-1}
+.course-visual-icon{display:grid;place-items:center;width:88px;height:88px;border:1px solid rgba(255,255,255,.35);border-radius:26px;background:rgba(255,255,255,.2);box-shadow:0 16px 35px rgba(13,31,78,.16);backdrop-filter:blur(6px);font-size:3rem;transform:rotate(-8deg)}
+.course-visual>b{position:absolute;left:18px;bottom:15px;font-size:.72rem;letter-spacing:.13em}
+.course-visual-chip{position:absolute;padding:6px 10px;border:1px solid rgba(255,255,255,.4);border-radius:999px;background:rgba(255,255,255,.21);font-size:.68rem;font-weight:900;backdrop-filter:blur(5px)}
+.chip-one{left:24px;top:24px;transform:rotate(-8deg)}.chip-two{right:22px;top:45px;transform:rotate(8deg)}
+.visual-tynker{background:linear-gradient(135deg,#ff9852,#ed5878)}
+.visual-roblox{background:linear-gradient(135deg,#4770d7,#273a91)}
+.visual-figma{background:linear-gradient(135deg,#8759d9,#e36e9c)}
+.visual-python{background:linear-gradient(135deg,#1d526d,#318f9d)}
+.visual-maker{background:linear-gradient(135deg,#49aa90,#78c963)}
+.visual-robot{background:linear-gradient(135deg,#4360a5,#26b8bb)}
+.visual-design{background:linear-gradient(135deg,#ee765a,#a454cf)}
+.course-card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.course-topic,.course-age{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;font-size:.78rem;font-weight:800}
+.course-topic{background:#eef2ff;color:#4f6df5}.course-age{background:#f2f5fb;color:#53627b}
+.course-card h3{font-size:1.4rem;line-height:1.25;margin:3px 0 0}
+.course-card p{margin:0;color:var(--muted);font-size:.94rem}
+.course-card .course-output{padding-top:12px;border-top:1px solid #edf0f6}
+.course-card strong{color:var(--ink)}
+.steam-spectrum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:32px}
+.steam-spectrum span{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:17px;background:#fff;border:1px solid #e4eaf6;color:var(--ink);font-weight:750;font-size:.85rem;box-shadow:0 7px 20px rgba(35,50,90,.04)}
+.steam-spectrum b{display:grid;place-items:center;flex:0 0 31px;height:31px;border-radius:10px;color:#fff;background:var(--blue);font-size:1rem}
+.steam-spectrum span:nth-child(2) b{background:var(--cyan)}.steam-spectrum span:nth-child(3) b{background:var(--green)}.steam-spectrum span:nth-child(4) b{background:var(--orange)}.steam-spectrum span:nth-child(5) b{background:var(--violet)}
+@media(max-width:900px){.course-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.steam-spectrum{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.course-catalog{grid-template-columns:1fr}.course-visual{height:160px}.steam-spectrum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* STEAM course pathways and module syllabus */
+.syllabus-hero{padding:150px 0 70px;background:radial-gradient(circle at 85% 20%,#e8dcff 0,transparent 28%),linear-gradient(130deg,#f8fbff,#edf2ff)}
+.syllabus-hero h1{font-size:clamp(2.8rem,5vw,5rem);line-height:1.05;letter-spacing:-.05em;margin:18px 0}
+.syllabus-hero p{max-width:710px;color:var(--muted);font-size:1.13rem}.syllabus-hero .btn{margin-top:14px}
+.syllabus-main{padding:50px 0 96px}
+.syllabus-jump{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:48px}
+.syllabus-jump a{display:inline-flex;align-items:center;gap:9px;padding:9px 12px;border-radius:999px;border:1px solid #dfe6f4;background:#fff;font-size:.83rem;font-weight:800}
+.syllabus-jump a:hover,.syllabus-jump a:focus-visible{color:var(--blue);border-color:var(--blue)}
+.syllabus-jump b{display:grid;place-items:center;min-width:24px;height:24px;border-radius:50%;background:#eef2ff;color:var(--blue)}
+.syllabus-course{scroll-margin-top:100px;padding:34px 0 50px;border-top:1px solid #dfe6f2}
+.syllabus-course-heading{display:flex;align-items:center;gap:18px}
+.syllabus-icon{display:grid;place-items:center;flex:0 0 66px;height:66px;border-radius:20px;background:linear-gradient(135deg,#eef2ff,#e8faff);font-size:2rem}
+.syllabus-course-heading h2{font-size:clamp(1.8rem,3vw,2.8rem);line-height:1.15;margin:8px 0}
+.syllabus-result{max-width:900px;margin:20px 0 26px;padding:18px 22px;border-left:4px solid var(--violet);border-radius:0 15px 15px 0;background:#f0f3ff;color:#46536a}
+.syllabus-result strong{color:var(--ink)}
+.module-list{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;padding:0;margin:0}
+.module-list li{min-width:0}
+.module-list details{height:100%;border:1px solid #e3e9f4;border-radius:17px;background:#fff;box-shadow:0 8px 24px rgba(35,50,90,.05)}
+.module-list details[open]{border-color:#aebcf9;box-shadow:0 12px 28px rgba(79,109,245,.1)}
+.module-list summary{display:flex;align-items:center;gap:13px;min-height:74px;padding:14px 17px;cursor:pointer;list-style:none;font-weight:850;line-height:1.3}
+.module-list summary::-webkit-details-marker{display:none}
+.module-list summary:after{content:"＋";margin-left:auto;color:var(--blue);font-size:1.2rem}
+.module-list details[open] summary:after{content:"−"}
+.module-list summary b{display:grid;place-items:center;flex:0 0 36px;height:36px;border-radius:12px;background:#eef2ff;color:var(--blue);font-size:.84rem}
+.module-list details p{margin:0 17px 14px 66px;color:var(--muted);font-size:.92rem}
+.module-list details p:last-child{padding-top:11px;border-top:1px solid #edf0f6}.module-list details strong{color:var(--ink)}
+@media(max-width:900px){.module-list{grid-template-columns:1fr}}
+@media(max-width:600px){.syllabus-hero{padding:115px 0 55px}.syllabus-course-heading{align-items:flex-start}.syllabus-icon{flex-basis:52px;height:52px;font-size:1.6rem}.module-list summary{min-height:68px}.module-list details p{margin-left:18px}}
+
+/* Individual STEAM course pages */
+.course-card{cursor:pointer}
+.course-card .course-count{align-self:flex-start;padding:5px 10px;border-radius:999px;background:#eaf9fa;color:#237d89;font-size:.78rem;font-weight:850}
+.course-card-link{display:flex;align-items:center;justify-content:space-between;gap:12px;margin: auto 0 0!important;padding:16px 23px;border-top:1px solid #e4eaf6;color:var(--blue);font-weight:900}
+.course-card-link:after{content:"";position:absolute;inset:0;z-index:3}
+.course-card-link span{font-size:1.2rem}
+.course-card:has(.course-card-link:focus-visible){outline:3px solid var(--cyan);outline-offset:4px}
+.course-page-hero{background:radial-gradient(circle at 88% 15%,#d9e1ff 0,transparent 27%),linear-gradient(130deg,#f8fbff,#eef2ff)}
+.course-page-hero h1{max-width:850px}
+.course-page-next{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:26px}
+.course-page-next a{display:inline-flex;align-items:center;padding:12px 16px;border:1px solid #dfe6f4;border-radius:13px;background:#fff;color:var(--blue);font-weight:800}
+.course-page-next a:hover{border-color:var(--blue);background:#eef2ff}
+
+/* Illustrated module tiles on individual STEAM course pages. */
+.module-list summary{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;column-gap:13px;row-gap:13px}
+.module-illustration{grid-column:1/-1;width:100%;height:168px;object-fit:cover;border-radius:12px;background:#eaf0ff}
+.module-list summary b{grid-column:1}
+.module-list summary span{grid-column:2}
+.module-list summary:after{grid-column:3}
+@media(max-width:600px){.module-illustration{height:150px}}
